@@ -4,6 +4,9 @@ library(lubridate)
 first <- Sys.Date()
 #last <- first + years(2) # this doesn't work on leap-days
 last <- first + days(730) # 2 years forward
+#last <- first + days(315)
+#last <- first + days(220)
+#first <- first + days(215)
 
 ##apiurl <- 'http://api.kennedy-center.org/api/Calendar/GetCalendarData/2017-7-16/2018-8-1'
 #apiurl <- 'http://api.kennedy-center.org/api/Calendar/GetCalendarData/2017-7-16/2017-7-17'
@@ -26,6 +29,7 @@ raw <- content(pg)
 df <- do.call(rbind, raw)
 df2 <- as.data.frame(df)
 
+df2$BlurbAbstract[sapply(df2$BlurbAbstract, is.null)] <- NA
 #df2$AvailableModesOfSale[sapply( l, paste0, collapse="")]
 df2$AvailableModesOfSale[sapply(length, paste0, collapse="")]
 
@@ -36,7 +40,8 @@ df2$CustomerModeOfSaleDescription[sapply(df2$CustomerModeOfSaleDescription, is.n
 df2$EventCode[sapply(df2$EventCode, is.null)] <- NA
 df2$VenueCode[sapply(df2$VenueCode, is.null)] <- NA
 df2$PromoMessage[sapply(df2$PromoMessage, is.null)] <- NA
-df2$Series[sapply(df2$Series, is.null)] <- NA
+df2$Series[!sapply(df2$Series, length)] <- NA
+#df2$Series[sapply(df2$Series, is.null)] <- NA
 df2$DisplayOnSaleDate[sapply(df2$DisplayOnSaleDate, is.null)] <- NA
 df2$DisplayDonorOnSale[sapply(df2$DisplayDonorOnSale, is.null)] <- NA
 
